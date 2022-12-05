@@ -1,0 +1,37 @@
+node_modules
+
+
+# Editor
+.vscode
+.devcontainer
+.DS_Store
+
+# Build
+/lib
+/dist
+
+# Local config
+.npmrc
+migrate-mongo-config.js
+
+# Logs
+*.log
+*.heapsnapshot
+
+# Dependencies
+node_modules
+yarn.lock
+
+# Test
+test-report.json
+test-report.xml
+coverage
+
+# Docker
+mongodb/data
+data
+.env
+
+
+
+

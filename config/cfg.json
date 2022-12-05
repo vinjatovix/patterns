@@ -1,0 +1,5 @@
+{
+  "migrations": true,
+  "defaultLimit": 20,
+  "system": { "allowedRoles": ["system.admin", "system.editor", "system.user"] }
+}
