@@ -1,4 +1,4 @@
-const { market, CivilizationFactory } = require("../../../src/classes/civilizations");
+const { market, CivilizationFactory } = require("../../../../src/classes/civilizations");
 
 describe("Market", () => {
   it("should be the marketMaker", () => {
