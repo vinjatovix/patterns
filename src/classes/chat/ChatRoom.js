@@ -1,61 +1,55 @@
-class Person {
+const Event = require("../common/Event");
+
+class ChatRoomUser {
   constructor(name) {
     this.name = name;
+    this.room = null;
     this.chatLog = [];
-  }
-  receive(sender, message) {
-    let s = `${sender}: '${message}'`;
-    this.chatLog.push(s);
   }
 
   say(message) {
-    this.room.broadcast(this.name, message);
+    const args = new ChatRoomUserEventArgs(this.name, message);
+    this.room.events.fire(this, args);
   }
 
-  privateMessage(who, message) {
-    this.room.message(this.name, who, message);
+  privateMessage(to, message) {
+    const args = new ChatRoomUserEventArgs(this.name, message, to);
+    this.room.events.fire(this, args);
+  }
+
+  join(room) {
+    this.room = room;
+    this.room.people.push(this);
+    const args = new ChatRoomUserEventArgs("room", `${this.name} joins the chat`);
+    this.room.events.subscribe((sender, args) => {
+      if (args.sender !== this.name && (args.receiver === "room" || args.receiver === this.name)) {
+        this.chatLog.push(`${args.sender}: '${args.message}'`);
+      }
+    });
+    this.room.events.fire(this, args);
+  }
+
+  leave() {
+    const args = new ChatRoomUserEventArgs("room", `${this.name} leaves the chat`);
+    this.room.events.fire(this, args);
+    this.room.people = this.room.people.filter(person => person.name !== this.name);
+    this.room = null;
+  }
+}
+
+class ChatRoomUserEventArgs {
+  constructor(sender, message, receiver = "room") {
+    this.sender = sender;
+    this.message = message;
+    this.receiver = receiver;
   }
 }
 
 class ChatRoom {
   constructor() {
+    this.events = new Event();
     this.people = [];
-  }
-
-  broadcast(sender, message) {
-    for (let p of this.people) {
-      if (p.name !== sender) {
-        p.receive(sender, message);
-      }
-    }
-  }
-
-  join(p) {
-    let joinMsg = `${p.name} joins the chat`;
-    this.broadcast("room", joinMsg);
-    p.room = this;
-    this.people.push(p);
-  }
-
-  leave(p) {
-    let index = this.people.indexOf(p);
-    if (index !== -1) {
-      this.people.splice(index, 1);
-    }
-    let leaveMsg = `${p.name} leaves the chat`;
-    this.broadcast("room", leaveMsg);
-  }
-
-  message(sender, receiver, message) {
-    let p = this.people.find(p => p.name === receiver);
-    if (p) {
-      p.chatLog.push(`${sender}: '${message}'`);
-    }
-  }
-
-  getPeople() {
-    return this.people;
   }
 }
 
-module.exports = { Person, ChatRoom };
+module.exports = { ChatRoomUser, ChatRoom };
