@@ -1,21 +1,42 @@
-const { Entity } = require("../common");
-const { CreatureModifier } = require("./CreatureModifiers");
+const { Entity, Query } = require("../common");
+
+const whatToQuery = Object.freeze({
+  damage: "damage",
+  defense: "defense",
+  health: "health"
+});
 
 class Creature extends Entity {
-  constructor({ name, description, health = 100, damage = 10, defense = 0 }) {
+  constructor({ game, name, description, health = 100, damage = 10, defense = 0 }) {
     super(name, description);
-    this.health = health;
-    this.damage = damage;
-    this.defense = defense;
-    this.booster = new CreatureModifier(this);
+    this.game = game;
+    this.initialHealth = health;
+    this.initialDamage = damage;
+    this.initialDefense = defense;
   }
-  attack(target) {
-    target.health -= this.damage - target.defense;
+
+  get health() {
+    const q = new Query(this.getName(), whatToQuery.health, this.initialHealth);
+    this.game.performQuery(this, q);
+    return q.result;
+  }
+
+  get damage() {
+    const q = new Query(this.getName(), whatToQuery.damage, this.initialDamage);
+    this.game.performQuery(this, q);
+    return q.result;
+  }
+
+  get defense() {
+    const q = new Query(this.getName(), whatToQuery.defense, this.initialDefense);
+    this.game.performQuery(this, q);
+    return q.result;
   }
 
   toString() {
-    return `${super.toString()} - Health: ${this.health} - Damage: ${this.damage} - Defense: ${this.defense}`;
+    return `${this.getName()} (${this.health}/${this.damage}/${this.defense})`;
   }
+
   toJSON() {
     return {
       ...super.toJSON(),
@@ -26,4 +47,4 @@ class Creature extends Entity {
   }
 }
 
-module.exports = Creature;
+module.exports = { Creature, whatToQuery };

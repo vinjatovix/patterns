@@ -1,4 +1,4 @@
-const Creature = require("./Creature");
+const { Creature } = require("./Creature");
 const { CreatureModifier, DoubleAttackModifier, IncreaseDefenseModifier } = require("./CreatureModifiers");
 
 module.exports = {

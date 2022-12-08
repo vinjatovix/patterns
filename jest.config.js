@@ -1,7 +1,7 @@
 module.exports = {
   testEnvironment: "node",
   testRegex: "/test/.*[-.]test\\.js?$",
-  modulePathIgnorePatterns: ["<rootDir>/.yarn_cache"],
+  modulePathIgnorePatterns: ["<rootDir>/.yarn_cache", "<rootDir>/canvas"],
   setupFiles: [],
   snapshotSerializers: [],
   collectCoverage: true,
@@ -11,5 +11,5 @@ module.exports = {
   watchPathIgnorePatterns: ["<rootDir>/test-report.json"],
   reporters: ["default"],
   testResultsProcessor: "jest-sonar-reporter",
-  coveragePathIgnorePatterns: ["/node_modules/", "/test/"]
+  coveragePathIgnorePatterns: ["/node_modules/", "/test/", "/canvas/"]
 };

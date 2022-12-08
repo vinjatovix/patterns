@@ -1,38 +1,41 @@
+const { whatToQuery } = require("./Creature");
+
 class CreatureModifier {
-  constructor(creature) {
+  constructor(game, creature) {
+    this.game = game;
     this.creature = creature;
-    this.next = null;
+    this.token = this.game.queries.subscribe(this.handle.bind(this));
   }
-  add(modifier) {
-    if (this.next) {
-      this.next.add(modifier);
-    } else {
-      this.next = modifier;
-    }
+  handle(sender, query) {
+    // implement in subclasses
   }
-  handle() {
-    if (this.next) {
-      this.next.handle();
-    }
+  dispose() {
+    this.game.queries.unsubscribe(this.token);
   }
 }
 
 class DoubleAttackModifier extends CreatureModifier {
-  handle() {
-    this.creature.damage *= 2;
-    super.handle();
+  handle(sender, query) {
+    if (query.name === this.creature.getName() && query.whatToQuery === whatToQuery.damage) {
+      query.result *= 2;
+    }
   }
 }
 
 class IncreaseDefenseModifier extends CreatureModifier {
-  handle() {
-    this.creature.defense += 3;
-    super.handle();
+  handle(sender, query) {
+    if (query.name === this.creature.getName() && query.whatToQuery === whatToQuery.defense) {
+      query.result += 3;
+    }
   }
 }
 
-module.exports = {
-  CreatureModifier,
-  DoubleAttackModifier,
-  IncreaseDefenseModifier
-};
+class IncreaseHealthModifier extends CreatureModifier {
+  handle(sender, query) {
+    if (query.name === this.creature.getName() && query.whatToQuery === whatToQuery.health) {
+      query.result += 100;
+    }
+  }
+}
+
+module.exports = { CreatureModifier, DoubleAttackModifier, IncreaseDefenseModifier, IncreaseHealthModifier };
