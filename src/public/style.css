@@ -1,0 +1,18 @@
+body {
+  display: grid;
+  border: 1px solid #000;
+}
+
+#canvas1 {
+  border: 1px solid #000;
+  width: 600px;
+  height: 600px;
+}
+
+.controls {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr;
+  grid-gap: 10px;
+  border: 1px solid #000;
+}
