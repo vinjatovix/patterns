@@ -10,7 +10,7 @@ const { canvas, ctx } = getCanvasAndContext("canvas1");
 const CANVAS_WIDTH = (canvas.width = 500);
 const CANVAS_HEIGHT = (canvas.height = 1000);
 
-const numEnemies = 15;
+const numEnemies = 10;
 const enemies = [];
 
 let gameFrame = 0;
@@ -94,9 +94,16 @@ class Enemy {
     if (this.y + this.height > CANVAS_HEIGHT || this.y < 0) {
       this.ySpeed = -this.ySpeed;
     }
+
+    if (this.detectCircleCollision()) {
+      this.xSpeed = -this.xSpeed;
+      this.ySpeed = -this.ySpeed;
+    }
+
     this.x += this.xSpeed;
     this.y += this.ySpeed;
   }
+
   restrictToCanvas() {
     if (this.x + this.width > CANVAS_WIDTH) {
       this.x = CANVAS_WIDTH - this.width;
@@ -113,24 +120,28 @@ class Enemy {
   }
 
   update() {
-    if (this.randomType === 0) this.asAFly({ elipse: true, restrictToCanvas: true });
+    if (this.randomType === 0) this.asAFly({ restrictToCanvas: true });
     if (this.randomType === 1) this.endlessLeft({ sine: true });
-    if (this.randomType === 2) this.compositeSineWave();
+    if (this.randomType === 2) this.compositeSineWave({ restrictToCanvas: true });
     if (this.randomType === 3) this.elipse({ restrictToCanvas: true });
-    if (this.randomType === 4) this.randomPath();
+    if (this.randomType === 4) this.randomPath({ collider: this.detectCircleCollision });
     if (this.randomType === 5) this.bounceTheWalls();
 
     this.animateSprite();
   }
 
-  randomPath(speed = 40, interval = this.interval) {
-    if (gameFrame % interval === 0) {
-      this.newX = Math.random() * (CANVAS_WIDTH - this.width);
-      this.newY = Math.random() * (CANVAS_HEIGHT - this.height);
+  randomPath({ speed = 40, interval = this.interval } = {}) {
+    if (gameFrame % interval === 0 || this.detectCircleCollision(1)) {
+      this.setNewPoint();
     }
 
     this.x -= (this.x - this.newX) / speed;
     this.y -= (this.y - this.newY) / speed;
+  }
+
+  setNewPoint({ xDistance = CANVAS_WIDTH - this.width, yDistance = CANVAS_HEIGHT - this.height } = {}) {
+    this.newX = Math.random() * xDistance;
+    this.newY = Math.random() * yDistance;
   }
 
   asAFly({ sine, elipse, restrictToCanvas } = {}) {
@@ -138,10 +149,20 @@ class Enemy {
     elipse && this.elipse();
     this.x += Math.random() * 15 - 7.5;
     this.y += Math.random() * 10 - 5;
+    if (this.detectCircleCollision(10)) {
+      this.xSpeed = -this.xSpeed;
+      this.ySpeed = -this.ySpeed;
+
+      this.x += this.xSpeed;
+      this.y += this.ySpeed;
+    }
     restrictToCanvas && this.restrictToCanvas();
   }
 
   collibri({ restrictToCanvas } = {}) {
+    if (this.detectRectangleCollision(enemies)) {
+      this.randomPath();
+    }
     this.y += Math.sin((this.phase / Math.random()) * 10 - 5) * this.ySpeed;
     this.x += Math.cos((this.phase / Math.random()) * 10 - 5) * 2 * this.xSpeed;
     this.phase += this.angleSpeed;
@@ -163,6 +184,9 @@ class Enemy {
     this.x -= Math.abs(this.xSpeed);
     sine && this.verticalSineWave();
     elipse && this.elipse();
+    if (this.detectRectangleCollision()) {
+      this.randomPath();
+    }
     if (this.x + this.width < 0) {
       this.x = CANVAS_WIDTH;
     }
@@ -175,6 +199,10 @@ class Enemy {
   }
 
   elipse({ restrictToCanvas } = {}) {
+    if (this.detectRectangleCollision(10)) {
+      this.x += Math.random() * 10 - 5;
+      this.y += Math.random() * 10 - 5;
+    }
     this.x += Math.sin((this.phase * Math.PI) / 180) * this.xSpeed;
     this.y += Math.cos((this.phase * Math.PI) / 180) * this.ySpeed;
     this.phase += this.angleSpeed;
@@ -194,6 +222,63 @@ class Enemy {
       this.width,
       this.height
     );
+  }
+
+  detectRectangleCollision(distance = 0) {
+    let collision = false;
+
+    const rect = {
+      x: this.x,
+      y: this.y,
+      width: this.width + distance,
+      height: this.height + distance
+    };
+    enemies.forEach(enemy => {
+      if (enemy === this) return;
+      const rect2 = {
+        x: enemy.x,
+        y: enemy.y,
+        width: enemy.width,
+        height: enemy.height
+      };
+      if (
+        rect.x > rect2.x + rect2.width ||
+        rect.x + rect.width < rect2.x ||
+        rect.y > rect2.y + rect2.height ||
+        rect.y + rect.height < rect2.y
+      ) {
+        collision = false;
+      } else {
+        collision = true;
+      }
+    });
+    return collision;
+  }
+
+  detectCircleCollision(distance = 0) {
+    let collision = false;
+
+    const circle1 = {
+      x: this.x + this.width / 2,
+      y: this.y + this.height / 2,
+      radius: this.width / 2 + distance
+    };
+    enemies.forEach(enemy => {
+      if (enemy === this) return;
+      const circle2 = {
+        x: enemy.x + enemy.width / 2,
+        y: enemy.y + enemy.height / 2,
+        radius: enemy.width / 2
+      };
+      const dx = circle1.x - circle2.x;
+      const dy = circle1.y - circle2.y;
+      const distance = Math.sqrt(dx * dx + dy * dy);
+      if (distance < circle1.radius + circle2.radius) {
+        collision = true;
+      }
+    });
+
+    return collision;
   }
 }
 
