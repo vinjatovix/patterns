@@ -1,0 +1,15 @@
+body {
+  display: grid;
+  justify-content: center;
+  border: 1px solid #000;
+  font-family: "Courier New", Courier, monospace;
+  font-size: 12px;
+  color: #fff;
+}
+
+#canvas1 {
+  border: 1px solid black;
+  width: 500px;
+  height: 700px;
+  background-color: #000;
+}

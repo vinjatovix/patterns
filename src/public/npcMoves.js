@@ -10,7 +10,7 @@ const { canvas, ctx } = getCanvasAndContext("canvas1");
 const CANVAS_WIDTH = (canvas.width = 500);
 const CANVAS_HEIGHT = (canvas.height = 1000);
 
-const numEnemies = 10;
+const numEnemies = 30;
 const enemies = [];
 
 let gameFrame = 0;
@@ -122,7 +122,7 @@ class Enemy {
   update() {
     if (this.randomType === 0) this.asAFly({ restrictToCanvas: true });
     if (this.randomType === 1) this.endlessLeft({ sine: true });
-    if (this.randomType === 2) this.compositeSineWave({ restrictToCanvas: true });
+    if (this.randomType === 2) this.compositeSineWave({ amp: 2, restrictToCanvas: true });
     if (this.randomType === 3) this.elipse({ restrictToCanvas: true });
     if (this.randomType === 4) this.randomPath({ collider: this.detectCircleCollision });
     if (this.randomType === 5) this.bounceTheWalls();
@@ -192,7 +192,7 @@ class Enemy {
     }
   }
 
-  compositeSineWave(amp = 1, waveLength = Math.E, { restrictToCanvas } = {}) {
+  compositeSineWave({ amp = 1, waveLength = Math.E, restrictToCanvas } = {}) {
     this.verticalSineWave({ amp, waveLength });
     this.horizontalSineWave();
     restrictToCanvas && this.restrictToCanvas();
@@ -287,7 +287,7 @@ for (let i = 0; i < numEnemies; i++) {
   enemies.sort((a, b) => b.size - a.size);
 }
 
-const animate = () => {
+const animateEnemies = () => {
   ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
   enemies.forEach(enemy => {
     enemy.update();
@@ -295,7 +295,7 @@ const animate = () => {
   });
 
   gameFrame++;
-  requestAnimationFrame(animate);
+  requestAnimationFrame(animateEnemies);
 };
 
-animate();
+animateEnemies();
