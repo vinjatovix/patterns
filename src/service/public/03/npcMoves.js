@@ -17,37 +17,37 @@ let gameFrame = 0;
 
 const enemyTypes = {
   0: {
-    image: "img/enemy1.png",
+    image: "../img/enemy1.png",
     spriteWidth: 293,
     spriteHeight: 155,
     frames: 4
   },
   1: {
-    image: "img/enemy2.png",
+    image: "../img/enemy2.png",
     spriteWidth: 266,
     spriteHeight: 188,
     frames: 4
   },
   2: {
-    image: "img/enemy2.png",
+    image: "../img/enemy2.png",
     spriteWidth: 266,
     spriteHeight: 188,
     frames: 4
   },
   3: {
-    image: "img/enemy3.png",
+    image: "../img/enemy3.png",
     spriteWidth: 218,
     spriteHeight: 177,
     frames: 4
   },
   4: {
-    image: "img/enemy3.png",
+    image: "../img/enemy3.png",
     spriteWidth: 218,
     spriteHeight: 177,
     frames: 4
   },
   5: {
-    image: "img/enemy4.png",
+    image: "../img/enemy4.png",
     spriteWidth: 213,
     spriteHeight: 213,
     frames: 4

@@ -8,11 +8,11 @@ document.addEventListener("DOMContentLoaded", () => {
   canvas.height = 800;
 
   const worm = new Image();
-  worm.src = "./img/enemy_worm.png";
+  worm.src = "../img/enemy_worm.png";
   const ghost = new Image();
-  ghost.src = "./img/enemy_ghost.png";
+  ghost.src = "../img/enemy_ghost.png";
   const spider = new Image();
-  spider.src = "./img/enemy_spider.png";
+  spider.src = "../img/enemy_spider.png";
 
   const enemies = Object.freeze({
     worm: {

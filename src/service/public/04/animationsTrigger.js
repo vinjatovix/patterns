@@ -18,12 +18,12 @@ class Explosion {
     this.x = x;
     this.y = y;
     this.image = new Image();
-    this.image.src = "img/boom.png";
+    this.image.src = "../img/boom.png";
     this.frame = 0;
     this.timer = 0;
     this.angle = Math.random() * 6.2;
     this.sound = new Audio();
-    this.sound.src = "sfx/boom.wav";
+    this.sound.src = "../sfx/boom.wav";
     this.sound.volume = 0.4;
   }
   update() {
