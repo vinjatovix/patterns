@@ -1,0 +1,23 @@
+body {
+  border: #000 3px solid;
+  background-color: #fff;
+  font-family: "Open Sans", sans-serif;
+  font-size: 16px;
+  color: #000;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  justify-content: center;
+
+  align-items: center;
+}
+
+#canvas1 {
+  border: 3px solid #000;
+  width: 500px;
+  height: 800px;
+}
+
+img {
+  display: none;
+}
