@@ -6,13 +6,6 @@ const collisionCtx = collisionCanvas.getContext("2d");
 collisionCanvas.width = window.innerWidth;
 collisionCanvas.height = window.innerHeight;
 
-window.addEventListener("resize", () => {
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-  collisionCanvas.width = window.innerWidth;
-  collisionCanvas.height = window.innerHeight;
-});
-
 const enemyTypes = {
   0: {
     image: "img/enemy1.png",
