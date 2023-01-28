@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hit the road AI</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <canvas id="mainCanvas"></canvas>
+    <canvas id="networkCanvas"></canvas>
+    <div id="verticalButtons">
+      <form>
+        <!-- <label for="initialBrain">Initial Brain</label>
+        <input type="checkbox" name="initialBrain" id="initialBrain" value="1" /> -->
+        <label for="traffic">Traffic</label>
+        <input type="checkbox" id="traffic" name="traffic" value="true" />
+        <label for="trafficAmmount">Qty</label>
+        <input type="range" id="trafficAmmount" name="trafficAmmount" min="0" max="10" value="3" />
+      </form>
+
+      <button id="pause">(p) Pause</button>
+      <button id="game">(g) Game</button>
+      <button id="simulate">(s) Simulate</button>
+      <button id="train">(t) Train</button>
+      <button id="circle">(o) Circle</button>
+      <button id="randomize">(n) Randomize</button>
+      <button id="mix1and2">(x) Mix 1 and 2</button>
+      <button id="mix1or2">(c) Mix 1 or 2</button>
+      <button id="mutate">(m) Mutate all</button>
+      <button id="discard">(d) Discard focus</button>
+      <button id="slot1">(1) Save 1</button>
+      <button id="slot2">(2) Save 2</button>
+      <button id="delete1">(3) delete 1</button>
+      <button id="delete2">(4) delete 2</button>
+
+      <button id="allAlive">(a) Cache</button>
+      <button id="backupATH">(b) Add to ATH</button>
+      <button id="loadAll">(l) Load cache</button>
+      <button id="reset">(r) Reset</button>
+    </div>
+    <script type="module" src="index.js"></script>
+  </body>
+</html>

@@ -1,11 +1,13 @@
-import Clock from "./Clock.js";
+import Clock from "../common/clock/Clock.js";
+import { Game } from "../common/game/Game.js";
+import { ParticleSpritesManager } from "./ParticleSpritesManager.js";
 import Player from "./Player.js";
 import InputHandler from "./InputHandler.js";
-import { City, Forest } from "./BackGround.js";
+import { BackGroundFactory } from "./BackGround.js";
 import { SpawnManager } from "./SpawnManager.js";
 import { FlyingEnemy, GroundEnemy, ClimbingEnemy } from "./Enemy.js";
 import { UI } from "./UI.js";
-import { ParticleManager } from "./ParticleManager.js";
+import { FloatingMessagesManager } from "./FloatingMsgs.js";
 
 window.addEventListener("DOMContentLoaded", function () {
   const canvas = document.getElementById("canvas1");
@@ -14,18 +16,18 @@ window.addEventListener("DOMContentLoaded", function () {
   canvas.height = 700;
   const clock = new Clock();
 
-  class Game {
+  class RunningGame extends Game {
     constructor(width, height, clock) {
-      this.clock = clock;
-      this.width = width;
-      this.height = height;
+      super(width, height, clock);
       this.speed = 0;
       this.maxSpeed = 3;
-      this.backGround = Math.random() > 0.5 ? new City({ game: this }) : new Forest({ game: this });
+      this.backGround =
+        Math.random() > 0.5
+          ? BackGroundFactory.createBackGround({ game: this, type: "city" })
+          : BackGroundFactory.createBackGround({ game: this, type: "forest" });
       this.groundMargin = this.backGround["name"] === "city" ? 115 : 50;
       this.player = new Player(this);
       this.enemies = [];
-      this.debug = true;
       this.input = new InputHandler({ game: this });
       this.score = 0;
       this.fontColor = "black";
@@ -33,8 +35,8 @@ window.addEventListener("DOMContentLoaded", function () {
       this.maxTime = 30000;
       this.gameOver = false;
       this.UI = new UI({ game: this });
-      this.particles = new ParticleManager({ game: this });
-      this.floatingMessages = [];
+      this.particles = new ParticleSpritesManager({ game: this });
+      this.floatingMessages = new FloatingMessagesManager({ game: this });
     }
     settings({ enemies }) {
       for (const element of enemies) {
@@ -54,8 +56,7 @@ window.addEventListener("DOMContentLoaded", function () {
       this.enemies.forEach(spawn => spawn.update(deltaTime));
       this.player.update({ deltaTime, keys: this.input.keys });
       this.particles.update(deltaTime);
-      this.floatingMessages.forEach(message => message.update(deltaTime));
-      this.floatingMessages = this.floatingMessages.filter(message => !message.dead);
+      this.floatingMessages.update(deltaTime);
     }
 
     draw(ctx) {
@@ -70,16 +71,16 @@ window.addEventListener("DOMContentLoaded", function () {
         ctx.restore();
       }
       this.UI.draw(ctx);
-      this.floatingMessages.forEach(message => message.draw(ctx));
+      this.floatingMessages.draw(ctx);
     }
   }
 
-  const game = new Game(canvas.width, canvas.height, clock);
+  const game = new RunningGame(canvas.width, canvas.height, clock);
   game.settings({
     enemies: [
-      { type: GroundEnemy, spawnInterval: 4000, options: { prob: 0.5 } },
-      { type: FlyingEnemy, spawnInterval: 2000, options: { spawnOnStop: true } },
-      { type: ClimbingEnemy, spawnInterval: 2000, options: { prob: 0.5 } }
+      { type: GroundEnemy, spawnInterval: 1000, options: { prob: 0.5 } },
+      { type: FlyingEnemy, spawnInterval: 800, options: { spawnOnStop: true } },
+      { type: ClimbingEnemy, spawnInterval: 600, options: { prob: 0.3 } }
     ]
   });
 
@@ -89,6 +90,12 @@ window.addEventListener("DOMContentLoaded", function () {
     game.draw(ctx);
     if (!game.gameOver) {
       requestAnimationFrame(animate);
+    } else {
+      window.addEventListener("keydown", function (e) {
+        if (e.key === "Enter") {
+          window.location.reload();
+        }
+      });
     }
   }
   animate();

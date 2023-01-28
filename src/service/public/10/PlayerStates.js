@@ -8,6 +8,14 @@ const states = {
   HIT: "HIT"
 };
 
+const particles = {
+  DUST: "dust",
+  BLOOD: "blood",
+  SPLASH_FIRE: "splashFire",
+  SPLASH_WATER: "splashWater",
+  FIRE: "fire"
+};
+
 class State {
   constructor(state) {
     this.state = state;
@@ -59,7 +67,11 @@ export class RunState extends State {
 
   handleInput(keys) {
     Math.random() > 0.5 &&
-      this.player.game.particles.dust(this.player.x + this.player.width * 0.5, this.player.y + this.player.height);
+      this.player.game.particles.addParticle(
+        particles.DUST,
+        this.player.x + this.player.width * 0.5,
+        this.player.y + this.player.height
+      );
     if (keys.ArrowDown) {
       this.player.setState(states.SIT, 0);
     } else if (keys.ArrowUp) {
@@ -130,7 +142,8 @@ export class RollState extends State {
   }
 
   handleInput(keys) {
-    this.player.game.particles.fire(
+    this.player.game.particles.addParticle(
+      particles.FIRE,
       this.player.x + this.player.width * 0.5 + 20,
       this.player.y + this.player.height - 35
     );
@@ -161,14 +174,20 @@ export class DiveState extends State {
   }
 
   handleInput(keys) {
-    this.player.game.particles.fire(
+    this.player.game.particles.addParticle(
+      particles.FIRE,
       this.player.x + this.player.width * 0.5 + 20,
       this.player.y + this.player.height - 25
     );
 
     if (this.player.onGround()) {
       this.player.setState(states.RUN, 1);
-      this.player.game.particles.splashFire(this.player.x, this.player.y);
+      this.player.game.particles.addParticles(
+        particles.SPLASH_FIRE,
+        this.player.x + this.player.width * 0.5,
+        this.player.y + this.player.height * 0.5,
+        30
+      );
     } else if (keys[" "] && this.player.onGround()) {
       this.player.setState(states.ROLL, 2);
     }

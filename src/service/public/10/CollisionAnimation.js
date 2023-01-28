@@ -1,4 +1,4 @@
-import { SpriteManager } from "./SpriteManager.js";
+import { SpriteManager } from "../common/sprites/SpriteManager.js";
 
 const collisionImage = new Image();
 collisionImage.src = "../img/boom.png";

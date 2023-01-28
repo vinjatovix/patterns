@@ -1,5 +1,4 @@
-import { FloatingMessage } from "./FloatingMsgs.js";
-import { SpriteManager } from "./SpriteManager.js";
+import { SpriteManager } from "../common/sprites/SpriteManager.js";
 
 const flyImage = new Image();
 flyImage.src = "../img/enemy_fly.png";
@@ -52,15 +51,13 @@ class Enemy {
         this.offScreen = true;
         if (["ROLL", "DIVE"].includes(entity.currentState.state)) {
           this.game.score++;
-          this.game.floatingMessages.push(
-            new FloatingMessage({
-              x: this.x + this.width * 0.5,
-              y: this.y + this.height * 0.5,
-              value: "+1",
-              targetX: 100,
-              targetY: 30
-            })
-          );
+          this.game.floatingMessages.addMessage({
+            value: "+1",
+            x: this.x + this.width * 0.5,
+            y: this.y + this.height * 0.5,
+            targetX: 100,
+            targetY: 30
+          });
         } else {
           entity.setState("HIT", 0);
         }
@@ -121,7 +118,7 @@ export class GroundEnemy extends Enemy {
     });
     this.game = game;
     this.x = this.game.width;
-    this.y = this.game.height - this.height - this.game.groundMargin;
+    this.y = this.game.height - this.height - this.game.backGround.groundMargin;
     this.speedX = 0;
     this.speedY = 0;
   }
@@ -159,7 +156,7 @@ export class ClimbingEnemy extends Enemy {
     if (this.y + this.height < 0) {
       this.speedY = 1;
     }
-    if (this.y >= this.game.height * 0.5 - this.game.groundMargin + this.height - Math.random() * 100) {
+    if (this.y >= this.game.height * 0.5 - this.game.backGround.groundMargin + this.height - Math.random() * 100) {
       this.speedY = -1;
     }
   }

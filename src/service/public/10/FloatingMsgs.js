@@ -32,3 +32,23 @@ export class FloatingMessage {
     ctx.restore();
   }
 }
+
+export class FloatingMessagesManager {
+  constructor({ game }) {
+    this.game = game;
+    this.messages = [];
+  }
+
+  addMessage({ value, x, y, targetX, targetY }) {
+    this.messages.push(new FloatingMessage({ value, x, y, targetX, targetY }));
+  }
+
+  update(deltaTime) {
+    this.messages.forEach(message => message.update(deltaTime));
+    this.messages = this.messages.filter(message => !message.dead);
+  }
+
+  draw(ctx) {
+    this.messages.forEach(message => message.draw(ctx));
+  }
+}

@@ -1,0 +1,42 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: black;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#canvas1 {
+  background: gray;
+  max-width: 100%;
+  max-height: 100%;
+}
+
+#network {
+  background: rgb(83, 77, 126);
+  max-width: 100%;
+  max-height: 100%;
+}
+
+#verticalButtons {
+  display: flex;
+  flex-direction: column;
+}
+
+button {
+  border: none;
+  border-radius: 5px;
+  padding: 5px 5px 7px 5px;
+  margin: 2px;
+  cursor: pointer;
+}
+
+button:hover {
+  background: rgb(83, 77, 126);
+}

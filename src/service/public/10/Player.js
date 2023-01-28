@@ -1,5 +1,5 @@
+import { SpriteManager } from "../common/sprites/SpriteManager.js";
 import { SitState, RunState, JumpState, FallState, RollState, DiveState, HitState } from "./PlayerStates.js";
-import { SpriteManager } from "./SpriteManager.js";
 
 const playerImage = new Image();
 playerImage.src = "../img/shadow_dog_small.png";
@@ -11,7 +11,7 @@ export default class Player {
     this.width = 100;
     this.height = 91.3;
     this.x = 200;
-    this.y = this.game.height - this.height - this.game.groundMargin;
+    this.y = this.game.height - this.height - this.game.backGround.groundMargin;
     this.spriteManager = new SpriteManager({
       image: this.image,
       width: this.width,
@@ -44,7 +44,7 @@ export default class Player {
   }
 
   onGround() {
-    return this.y >= this.game.height - this.height - this.game.groundMargin;
+    return this.y >= this.game.height - this.height - this.game.backGround.groundMargin;
   }
   #limitX() {
     if (this.x < 0) {
@@ -55,8 +55,8 @@ export default class Player {
   }
 
   #limitY() {
-    if (this.y >= this.game.height - this.height - this.game.groundMargin) {
-      this.y = this.game.height - this.height - this.game.groundMargin;
+    if (this.y >= this.game.height - this.height - this.game.backGround.groundMargin) {
+      this.y = this.game.height - this.height - this.game.backGround.groundMargin;
     }
   }
 
