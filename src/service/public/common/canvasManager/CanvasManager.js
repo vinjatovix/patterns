@@ -10,4 +10,19 @@ export class CanvasManager {
     this[canvas].height = height;
     this[canvas].ctx = this[canvas].getContext("2d");
   }
+
+  getCenter(canvas) {
+    return {
+      x: this[canvas].width * 0.5,
+      y: this[canvas].height * 0.5
+    };
+  }
+
+  clear(canvas) {
+    this[canvas].ctx.clearRect(0, 0, this[canvas].width, this[canvas].height);
+  }
+
+  getCtx(canvas) {
+    return this[canvas].ctx;
+  }
 }

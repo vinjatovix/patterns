@@ -2,8 +2,8 @@ export class SpriteManager {
   constructor({ image, width, height, maxFrameX, fps }) {
     this.image = image;
     this.width = width;
-    this.height = height;
     this.maxFrameX = maxFrameX;
+    this.height = height;
     this.fps = fps;
     this.frameX = 0;
     this.frameY = 0;
